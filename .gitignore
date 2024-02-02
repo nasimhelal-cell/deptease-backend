@@ -1,0 +1,47 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+package-lock.json
+yarn.lock
+certbot
+/certbot
+/package-lock.json
+/yarn.lock
+# testing
+/coverage
+/.env
+# next.js
+/.next/
+/_static/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# local env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+# vercel
+.vercel
+
+public/uploads/allFiles
+google_summer_of_code_proposal.md
+
+mejeci2234@nmaller.com
+kibol60521@mliok.com
