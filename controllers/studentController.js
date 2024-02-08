@@ -31,7 +31,7 @@ import idFinder from "../utils/IdFinder.js";
 
 export const signup = async (req, res) => {
   const { firstName, lastName, reg, email, password } = req.body;
-
+console.log(req.body)
   if (!firstName || !lastName || !reg || !email || !password) {
     return res.status(400).json({
       message: "Invalid credentials. Please provide correct information",
@@ -210,62 +210,72 @@ export const logout = (req, res) => {
 };
 
 export const allStudents = async (req, res) => {
-  const students = await Student.find({});
+  const students = await Student.find({})
+    .populate("personal")
+    .populate("address")
+    .populate("contact")
+    .populate("education")
+    .populate("skill")
+    .populate({
+      path: "varsity",
+      populate: [{ path: "dept" }, { path: "hall" }],
+    });
 
   return res.status(200).json({ students });
 };
 
 export const getStudentById = async (req, res) => {
-  const { id } = req.params;
-  const student = await Student.findOne({ _id: id });
-  const personal = await Personal.findById(student.personal);
-  const address = await Address.findById(student.address);
-  const contact = await Contact.findById(student.contact);
-  const education = await Education.findById(student.education);
-  const skill = await Skill.findById(student.skill);
-  const varsity = await Varsity.findById(student.varsity);
-  const dept = await Department.findById(varsity.dept);
-  const hall = await Hall.findById(varsity.hall);
-  const course = await Course.findById(dept.course);
 
-  return res.status(200).json({
-    personal,
-    address,
-    contact,
-    education,
-    skill,
-    varsity,
-    dept,
-    hall,
-    course,
-  });
+  const {reg} = req.params
+  const user = await User.findOne({reg})
+  if(!user){
+  return  res.status(400).json({message:'No student found with this reg :'+reg})
+  }
+console.log(user._id.toString())
+  const student = await Student.findById('65bca70cbb3f3d86aedeae8c')
+    // .populate("personal", "-_id -__v")
+    // .populate("address")
+    // .populate("contact")
+    // .populate("education")
+    // .populate("skill")
+    // .populate({
+    //   path: "varsity",
+    //   populate: [{ path: "dept" }, { path: "hall" }],
+    // });
+
+  return res.status(200).json({user:user._id,student});
 };
 
 export const updateStudentDataById = async (req, res) => {
-  const { id } = req.params;
-  const { personal, contact } = req.body;
+  const {reg} = req.params
+  const { personal } = req.body;
 
-  const student = await Student.findOne({ _id: id });
-  const personalData = await Personal.findByIdAndUpdate(
-    student.personal,
-    personal
-  );
-  // const address= await Address.findById(student.address)
-  const contactData = await Contact.findByIdAndUpdate(student.contact, contact);
-  // const education= await Education.findById(student.education)
-  // const skill= await Skill.findById(student.skill)
-  // const varsity= await Varsity.findById(student.varsity)
+  const user = await User.findOne({reg})
+  if(!user){
+  return  res.status(400).json({message:'No student found with this reg :'+reg})
+  }
+  
 
-  // const dept= await Department.findById(varsity.dept)
-  // const hall= await Hall.findById(varsity.hall)
+  try {
+    const student = await Student.findOne({user:user._id})
+      .populate("personal")
+      .populate("address")
+      .populate("contact")
+      .populate("education")
+      .populate("skill")
+      .populate({
+        path: "varsity",
+        populate: [{ path: "dept" }, { path: "hall" }],
+      })
+    
 
-  // const course= await Course.findById(dept.course)
-
-  res
-    .status(200)
-    .json({ message: personalData.fullName + `'s details updated` });
-};
-
-export const studentWithDetails = async (req, res) => {
-  const student = await Student.findById(student._id).populate();
+    res
+      .status(200)
+      .json({
+        message:student
+      });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 };

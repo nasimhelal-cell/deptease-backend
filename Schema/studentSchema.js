@@ -112,4 +112,8 @@ export const studentSchema = new mongoose.Schema({
     ref: "Varsity",
   },
   skill: { type: mongoose.Schema.Types.ObjectId, ref: "Skill" },
+  timestamps: {
+    created_at: { type: Date, default: Date.now },
+    updated_at: { type: Date, default: Date.now }
+  }
 });

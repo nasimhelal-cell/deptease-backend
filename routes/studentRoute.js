@@ -4,11 +4,11 @@ import { auth } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-router.route('/students/signup').post(signup)
-router.route('/students/signin').post(login)
+router.route('/students/sign-up').post(signup)
+router.route('/students/sign-in').post(login)
 router.route('/students/logout').get(logout)
 
-router.route('/students/:id').get(getStudentById).patch(updateStudentDataById)
-router.route('/students').get(auth, allStudents)
+router.route('/students/:reg').get(getStudentById).patch(updateStudentDataById)
+router.route('/students').get(allStudents)
 
 export default router
