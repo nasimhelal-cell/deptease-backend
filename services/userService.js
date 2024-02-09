@@ -2,15 +2,13 @@ import bcrypt from "bcrypt";
 import {
   Address,
   Contact,
-  Course,
   Department,
   Education,
   Hall,
   Personal,
-  Skill,
   Student,
   User,
-  Varsity,
+  Varsity
 } from "../models/models.js";
 
 export const createUser = async ({
@@ -118,24 +116,7 @@ export const createEducation = async ({
   return await education.save();
 };
 
-export const createSkill = async ({ name, description, certificate }) => {
-  const skill = new Skill({
-    name,
-    description,
-    certificate,
-  });
 
-  return await skill.save();
-};
-
-export const createCourse = async ({ name, code }) => {
-  const course = new Course({
-    name,
-    code,
-  });
-
-  return await course.save();
-};
 
 export const createDepartment = async ({
   name,
@@ -143,7 +124,7 @@ export const createDepartment = async ({
   roll,
   session,
   isRegular,
-  course,
+  courses,
 }) => {
   const department = new Department({
     name,
@@ -151,7 +132,7 @@ export const createDepartment = async ({
     roll,
     session,
     isRegular,
-    course,
+    courses,
   });
 
   return await department.save();
@@ -179,21 +160,23 @@ export const createVarsity = async ({ name, location, dept, hall }) => {
 
 export const createStudent = async ({
   user,
+  reg,
   personal,
   address,
   contact,
   education,
   varsity,
-  skill,
+  skills,
 }) => {
   const student = new Student({
     user,
+    reg,
     personal,
     address,
     contact,
     education,
     varsity,
-    skill,
+    skills,
   });
   return await student.save();
 };

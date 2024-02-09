@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
 export const userSchema = new mongoose.Schema({
-  firstName:{type:String,required:true} ,
-  lastName: {type:String,required:true},
-  reg: {type:String,required:true},
-  email: {type:String,required:true},
-  password: {type:String,required:true},
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  reg: { type: String, required: true, unique: true }, // Added unique constraint
+  email: { type: String, required: true, unique: true }, // Added unique constraint
+  password: { type: String, required: true },
 });
 
 export const personalSchema = new mongoose.Schema({
@@ -19,6 +19,7 @@ export const personalSchema = new mongoose.Schema({
   religion: String,
   race: String,
   signature: String,
+  bio: String,
   gender: String,
   age: Number,
   img: String,
@@ -37,7 +38,7 @@ export const addressSchema = new mongoose.Schema({
 export const contactSchema = new mongoose.Schema({
   phone: String,
   facebook: String,
-  email: String,
+  email: { type: String, unique: true }, // Added unique constraint
 });
 
 export const educationSchema = new mongoose.Schema({
@@ -48,21 +49,13 @@ export const educationSchema = new mongoose.Schema({
   gpa: Number,
 });
 
-export const courseSchema = new mongoose.Schema({
-  name: String,
-  code: String,
-});
 
 export const departmentSchema = new mongoose.Schema({
   name: String,
   reg: String,
   roll: String,
   session: String,
-  isRegular: String,
-  course: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Course",
-  },
+  isRegular: String,  
 });
 
 export const hallSchema = new mongoose.Schema({
@@ -80,17 +73,14 @@ export const varsitySchema = new mongoose.Schema({
   hall: { type: mongoose.Schema.Types.ObjectId, ref: "Hall" },
 });
 
-export const skillSchema = new mongoose.Schema({
-  name: String,
-  description: String,
-  certificate: String,
-});
+
 
 export const studentSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  reg: { type: String, unique: true }, // Added unique constraint
   personal: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Personal",
@@ -111,9 +101,6 @@ export const studentSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Varsity",
   },
-  skill: { type: mongoose.Schema.Types.ObjectId, ref: "Skill" },
-  timestamps: {
-    created_at: { type: Date, default: Date.now },
-    updated_at: { type: Date, default: Date.now }
-  }
-});
+  
+}, { timestamps: true }); // Moved timestamps within the schema definition
+
